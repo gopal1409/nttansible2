@@ -1,0 +1,104 @@
+---
+-
+    hosts: centos1,ubuntu1
+
+    tasks:
+        - name: Install EPEL
+          yum:
+            name: epel-release
+            update_cache: yes
+            state: latest
+          when: ansible_distribution == 'CentOS'
+        - name: Install Nginx
+          package:
+            name: nginx 
+            state: latest
+        - name: install patch
+          yum:
+            name: patch
+            update_cache: yes
+            state: latest
+        when: ansible_distribution == 'CentOS'
+        - name : patch nginx.conf to include site-available, disable default server entry
+          patch:
+            src: files/nginx.conf.centos.patch
+            dest: /etc/nginx/nginx.conf
+        when: ansible_distribution == 'CentOS'
+        - name: Create /etc/nginx/site-available directory
+          file:
+            path: /etc/nginx/site-available
+            state: directory
+        - name: Create /etc/nginx/site-enabled directory
+          file:
+            path: /etc/nginx/site-enabled
+            state: directory
+        - name: Copy Default nginx configuration
+          copy:
+            src: files/nginx-default.conf
+            dest: /etc/nginx/site-available/default
+        - name: SYmbolic link 
+          file:
+            src: /etc/nginx/site-available/default
+            dest: /etc/nginx/site-enabled/default
+            state: link
+        - name: create nging/html directory
+          file:
+            path: /usr/share/nginx/html
+            state: directory
+        - name: template index.html.j2 to index.html on targe
+          copy:
+            src: templates/index.html.j2
+            dest: /usr/share/nginx/html/index.html
+            mode: 0644
+        - name: Restart nginx
+          service:
+            name: nginx
+            state: restarted
+          notify: Check HTTP service
+        - name: install firewalld
+          yum:
+            name: firewalld
+            update_cache: yes
+            state: latest
+      
+        - name: start firwalld service
+          systemd:
+            name: firewalld
+            state: started
+            enabled: yes
+        - name: enable firewalld 
+          service:
+            name: http
+            enabled: yes
+          service:
+            name: network
+            state: restarted
+            args: eth1
+        - name: Open a port in centos machine
+          firewalld:
+            service: http
+            permanent: true
+            state: enabled
+          when: ansible_distribution == 'CentOS'
+          notify: Reload Firewall
+    handlers:
+        - name: Check HTTP service
+          uri:
+            url: http://{{ ansible_default_ipv4.address }}  
+            status_code: 200
+
+        - name: Reload Firewall
+          service:
+            name: firewalld
+            state: reload 
+
+
+
+
+
+
+
+
+
+
+
