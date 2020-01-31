@@ -1,0 +1,8 @@
+---
+-
+    hosts: centos1,ubuntu1
+    tasks:
+        - name: System uptime
+          command: uptime
+          register: uptime
+        - debug: var=uptime
