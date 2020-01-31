@@ -1,0 +1,18 @@
+---
+-
+    hosts: centos1,ubuntu1
+    tasks:
+        - name: Creating User
+          user:
+            name: "{{ item.key }}"
+            comment: "{{ item.value.full_name }}"
+          with_dict:
+            gopal:
+                full_name: gopal das
+        - name: create authorized key
+          authorized_key:
+            user: gopal
+            key: "{{ item }}"
+          with_file:
+            - /root/.ssh/id_rsa.pub
+
