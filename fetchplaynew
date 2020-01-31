@@ -1,0 +1,10 @@
+[root@ansiblemastergd test]# cat fetchplay.yaml 
+---
+-
+    hosts: centos1,ubuntu1
+
+    tasks:
+        - name: fetch /etc/redhat-release
+          fetch:
+            src: /etc/os-release
+            dest: /tmp/
