@@ -1,0 +1,19 @@
+---
+-
+    hosts: centos1
+    tasks:
+        - name: Creating user
+          user:
+            name: "{{ item.key }}"
+            comment: "{{ item.value.full_name }}"
+          with_dict:
+            shyam:
+                full_name: shyam shayam
+        - name: create random directory
+          file:
+            dest: "/home/shyam/{{item}}"
+            state: directory
+          with_random_choice:
+            - "secret"
+            - "public"
+            - "test"  
