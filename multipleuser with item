@@ -1,0 +1,13 @@
+---
+-
+    hosts: centos1,ubuntu1
+    tasks:
+        - name: Creating user
+          user:
+            name: "{{ item }}"
+            state: absent
+          with_items:
+            - suresh
+            - james
+            - alvin
+            - ali 
