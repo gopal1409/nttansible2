@@ -1,0 +1,15 @@
+---
+-
+    hosts: centos1,ubuntu1
+    tasks:
+        - name: System uptime
+          command: uptime
+          register: uptime
+        - name: System hostname
+          command: hostname
+          register: host
+
+        - debug: var = {{ item }}
+          loop:
+            - uptime.stdout
+            - host.stdout
