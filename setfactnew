@@ -1,0 +1,25 @@
+---
+-
+    hosts: centos1,ubuntu1
+
+    tasks:
+        - name: Prompt user to verify before continue
+          pause:
+            prompt: please check that webserver if running, then press enter
+        - name: Set our installation variable for centos
+          set_fact:
+            webserver_application_port: 8181
+            webserver_application_path: /usr/share/www
+            webserver_application_user: root
+          when: ansible_distribution == 'CentOS'
+
+        - name: Set your installation variables for ubuntu1
+          set_fact:
+            webserver_application_port: 8080
+            webserver_application_path: /local/nginx
+            webserver_application_user: nginx
+          when: ansible_distribution == 'Ubuntu'
+        - name: show pre-set distribution based facts
+          debug:
+            msg: "webserver_application_port:{{ webserver_application_port }} webserver_application_path:{{ webserver_application_path }} webserver_application_user:{{ webserver_application_user }}"
+[root@ansiblemastergd test]# 
