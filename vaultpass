@@ -1,0 +1,39 @@
+---
+-
+    hosts: centos1
+    tasks:
+        - name: adding users
+          users:
+            name: john
+            password: john@123
+            shell: /bin/bash
+            group: root
+            createhome: yes
+            home: /home/john
+        - name: Copying confidential aggrement
+          copy:
+            content: "it is a confidential Aggreement between me and u"
+            dest: /home/john/Aggreement
+            
+            711  ansible-vault encrypt user1.yaml 
+  712  cat user1.yaml 
+  713  vi user1.yaml
+  714  cat user1.yaml 
+  715  ansible-vault view user1.yaml 
+  716  ansible-vault edit user1.yaml 
+  717  ansible-playbook user1.yaml 
+  718* 
+  719  cat user1.yaml 
+  720  ansible-playbook user1.yaml --vault-password-file /etc/ansible/vault-password
+  721  touch /etc/ansible/vault-passwrod
+  722  ansible-playbook user1.yaml --vault-password-file /etc/ansible/vault-passwrod
+  723  touch /etc/ansible/vault-password
+  724  ansible-playbook user1.yaml --vault-password-file /etc/ansible/vault-password
+  725  clear
+  726  ansible-vault rekey user1.yaml 
+  727  ansible-vault decrypt user1.yaml 
+  728  ansible-vault decrypt user1.yaml --ask-vault-pass
+  729  ansible-playbook user1.yaml --vault-password-file /etc/ansible/vault-password --ask-vault-pass
+  730  ansible-playbook user1.yaml -- ask-vault-pass --vault-password-file /etc/ansible/vault-password
+  731  ansible-playbook user1.yaml --ask-vault-pass --vault-password-file /etc/ansible/vault-password
+  732  cat user1.yaml 
