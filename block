@@ -1,0 +1,26 @@
+[root@ansiblemastergd test]# cat block.yaml 
+---
+-
+    hosts: centos1,ubuntu1
+    tasks:
+        - name: install patch and python-dns
+          block:
+            - name: install patch
+              package:
+                name: patch
+            - name: install python-dnspython
+              package:
+                name: python-dnspython
+          rescue:
+            - name: Roll patch
+              package:
+                name: patch
+                state: absent
+            - name: Rollback python-dnspython
+              package:
+                name: python-dnspython
+                state: absent
+          always:
+            - debug:
+                msg: This always run , regardless
+[root@ansiblemastergd test]# 
