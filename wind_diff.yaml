@@ -1,0 +1,15 @@
+---
+-
+    hosts: win
+    tasks:
+        - name: Disable Private firewall
+          win_firewall:
+            state: disabled
+            profiles: Private
+        - name: Update
+          win_updates:
+          register: reboot
+        - name: reboot
+          win_reboot:
+          when: reboot.reboot_required
+[root@ansiblemastergd win]# 
