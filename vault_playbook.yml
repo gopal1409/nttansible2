@@ -1,0 +1,9 @@
+---
+-
+    hosts: centos1,ubuntu1
+    vars_files:
+        - external_vault_vars.yml
+    task:
+        - name: Show external_vault_vars
+          debug:
+            var: external_vault_vars
